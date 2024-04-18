@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <label for="savedText">Save text Here</label> <br />
+
+    <textarea id="savedText" cols="30" rows="10"></textarea>
+    <button id="dlt">Delete</button>
+    <script>
+      const textArea = document.getElementById("savedText");
+      const dltBtn = document.getElementById("dlt")
+
+      const data = sessionStorage.getItem("saveMemory");
+      textArea.value = data;
+
+      savedText.addEventListener("keydown", () => {
+        // debugger;
+        setTimeout(() => {
+          const text = textArea.value;
+          console.log(text);
+          sessionStorage.setItem("saveMemory", text);
+        }, 0);
+      });
+
+      dltBtn.addEventListener("click",()=>{
+        sessionStorage.removeItem("saveMemory")
+        window.location.reload();
+      })
+
+    </script>
+  </body>
+</html>
