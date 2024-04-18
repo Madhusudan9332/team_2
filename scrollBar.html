@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .img-container {
+        border: 1px solid red;
+        text-align: center;
+      }
+      .img-container img {
+        height: 800px;
+        /* width: 500px; */
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Infinite Scroll</h1>
+      <div class="img-container">This is my imge Container</div>
+    </div>
+
+    <script>
+      const imgContainer = document.querySelector(".img-container");
+
+      const count = 10;
+      const apikey = "_DDIVJSgdK-GI1wA3aHOtxC9YTt8tCY6-4jMk7guznY";
+      const apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apikey}&count=${count}`;
+      // const apiUrl = `https://random.dog/woof.json`;
+
+      const imageArr = [];
+      let scrolled = false;
+      // function getImage() {
+
+      //   for (let i = 1; i <= 10; i++) {
+      //     fetch(apiUrl)
+      //       .then((Response) => {
+      //         // console.log(Response.json())
+      //         return Response.json();
+      //       })
+      //       .then((data) => {
+      //         console.log(data);
+      //         // SetImages(result);
+      //         imageArr.push(data.url);
+      //         if (i == 10) SetImages(imageArr);
+      //       })
+      //       .catch((error) => {
+      //         console.log("I have an error");
+      //         console.log(error);
+      //       });
+      //   }
+      // }
+
+      // function getImage(){
+      //   fetch(apiUrl).then(Response=>{
+      //     return Response.json();
+      //   }).then(data=>{
+      //     console.log(data);
+      //       data.forEach(ImgObjs=>{
+      //         // console.log(ImgObjs.urls.regular)
+      //         imageArr.push(ImgObjs.urls.regular)
+      //       })
+      //       SetImages(imageArr)
+      //   }).catch(err=>{
+      //     console.log(err);
+      //   })
+      // }
+
+      function getImage() {
+        const imagePromise = new Promise((res, rej) => {
+          res(fetch(apiUrl));
+          rej((err) => {
+            console.log(err);
+          });
+        });
+        
+        imagePromise
+          .then((Response) => {
+            console.log("check promise");
+            return Response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            data.forEach(ImgObjs=>{
+              console.log(ImgObjs.urls.regular)
+              imageArr.push(ImgObjs.urls.regular)
+            })
+            SetImages(imageArr)
+          })
+          .catch();
+      }
+
+      getImage();
+
+      const SetImages = function (data) {
+        // debugger
+        const div = document.createElement("div");
+        imageArr.forEach((image) => {
+          const img = document.createElement("img");
+          img.setAttribute("src", image);
+          div.appendChild(img);
+          console.log(img);
+        });
+        imgContainer.appendChild(div);
+        scrolled = false;
+      };
+
+      window.addEventListener("scroll",()=>{
+        if(window.innerHeight + window.scrollY >= document.body.offsetHeight){
+          // alert(window.innerHeight , window.scrollY , document.body.offsetHeight)
+          if(scrolled) return;
+          getImage()
+          scrolled = true;
+        }
+      })
+  
+  
+  </script>
+  </body>
+</html>
